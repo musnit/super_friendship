@@ -3,15 +3,15 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var user = {};
+var users = {};
 
 io.on('connection', function(socket){
 
-	io.on('register', function(user) {
+	socket.on('register', function(user) {
 		register(socket, user);
 	});
 
-	io.on('ping', function(ping) {
+	socket.on('ping', function(ping) {
 		receivePing(socket, ping);
 	});
 
@@ -28,7 +28,7 @@ app.get('/', function(req, res){
 function register(socket, data) {
 	console.log("New user", data);
 
-	users[user.nick] = new User(data);
+	users[data.nick] = new User(data);
 }
 
 // store then broadcast ping
@@ -52,7 +52,7 @@ function receivePing(socket, data) {
 function broadcastPing(socket, user) {
 	console.log("Broadcasting ping", user);
 
-	socket.broadcast.emit('broadcast', user);
+	io.emit('broadcast', user);
 }
 
 function User(data) {
