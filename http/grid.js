@@ -1,10 +1,11 @@
-var GridView = Backbone.View({
+var GridView = Backbone.View.extend({
 	className: 'grid',
 	events: {
 		'click': 'moveMe'
 	},
+	// collection is the users collection
+	// model is the viewer
 	initialize: function() {
-		this.viewer = this.createUser();
 		this.users = {};
 	},
 	receiveBroadcast: function(user) {

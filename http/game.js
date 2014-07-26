@@ -4,21 +4,27 @@ var Game = Backbone.Router.extend({
     'play': 'play'
   },
   initialize: function() {
-    var player = new UserModel();
+
+    this.users = new UserCollection();
 
     this.profile = new ProfileView({
-      model: player
+      model: this.users.viewer
     });
 
     this.grid = new GridView({
-      model: player
+      model: this.users.viewer,
+      collection: this.users
     });
+
+    this.listen();
   },
   profile: function() {
     $('body').append(this.profile.render().el);
   },
   play: function() {
     $('body').append(this.profile.render().el);
+  },
+  listen: function() {
   }
 });
 
