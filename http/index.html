@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>SonarGame</title>
     <script src="socketio.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
@@ -10,7 +10,16 @@
     <script src="profile.js"></script>
     <script src="grid.js"></script>
     <script src="game.js"></script>
+    <link rel="stylesheet" href="style.css"/>
   </head>
   <body>
+    <div class="grid"></div>
+    <div class="profile-screen">
+      <input type="text" name="nick" data-property="name" placeholder="Nickname"/>
+      <input type="text" name="color" data-property="color" placeholder="Color"/>
+      <input type="text" name="x" data-property="x" placeholder="x"/>
+      <input type="text" name="y" data-property="y" placeholder="y"/>
+      <button event-click="saveProfile()">Play</button>
+    </div>
   </body>
 </html>

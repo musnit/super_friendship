@@ -1,5 +1,5 @@
 var GridView = Backbone.View.extend({
-	className: 'grid',
+	el: '.grid',
 	events: {
 		'click': 'moveMe'
 	},
@@ -7,31 +7,25 @@ var GridView = Backbone.View.extend({
 	// model is the viewer
 	initialize: function() {
 		this.users = {};
+		this.listenTo(this.collection, 'add', this.createUserView);
 	},
-	receiveBroadcast: function(user) {
-		var player = this.users[user.nick];
-
-		if (!player) {
-			player = this.createUser(user);
-		}
-
-		player.model.set(user);
-	},
-	createUser: function(user) {
-		this.users[user.nick]  = new UserView({
+	createUserView: function(user) {
+		var view  = new UserView({
 			model: new UserModel(user)
 		});
+
+		this.users[user.nick] = view;
+
+		this.$el.append(view.render().el);
 	},
 	moveMe: function(e) {
-		var x = e.x;
-		var y = e.y;
+		var x = e.offsetX;
+		var y = e.offsetY;
 
-		this.me.set({
+		this.model.set({
 			x: x, y: y
 		});
 
-		socket.emit('ping', {
-			x: x, y: y
-		});
+		this.collection.sync();
 	}
 });

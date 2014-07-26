@@ -1,5 +1,6 @@
 var Game = Backbone.Router.extend({
   routes: {
+    '': 'profile',
     'profile': 'profile',
     'play': 'play'
   },
@@ -8,26 +9,28 @@ var Game = Backbone.Router.extend({
     this.users = new UserCollection();
 
     this.profile = new ProfileView({
-      model: this.users.viewer
-    });
-
-    this.grid = new GridView({
+      el: $('.profile-screen')[0],
       model: this.users.viewer,
       collection: this.users
     });
 
-    this.listen();
+    this.grid = new GridView({
+      el: $('.grid')[0],
+      model: this.users.viewer,
+      collection: this.users
+    });
+
   },
   profile: function() {
-    $('body').append(this.profile.render().el);
+    this.profile.render();
   },
   play: function() {
-    $('body').append(this.profile.render().el);
-  },
-  listen: function() {
+    this.profile.render();
   }
 });
 
-new Game();
+$(function() {
+  var game = new Game();
 
-
+  Backbone.history.start();
+});

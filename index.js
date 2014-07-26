@@ -11,8 +11,8 @@ io.on('connection', function(socket){
 		register(socket, user);
 	});
 
-	socket.on('ping', function(ping) {
-		receivePing(socket, ping);
+	socket.on('ping', function(data) {
+		receivePing(socket, data);
 	});
 
 });
