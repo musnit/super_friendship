@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+  </head>
+  <body>
+    nick: <input id="nick" autocomplete="off" />
+    color: <input id="color" autocomplete="off" />
+    <button id="register-button">register</button></body><br/>
+    x: <input id="x" autocomplete="off" />
+    y: <input id="y" autocomplete="off" />
+    <button id="ping-button">update position</button><br/>
+    Players and locations:
+    <ul id="player-list">
+    </ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var users = {};
+      var self = {};
+      var socket = io();
+      $('#register-button').click(function(){
+        self.nick = $('#nick')[0].value
+        self.color = $('#color')[0].value
+        refreshUserList(users)
+        socket.emit('register', self);
+      });
+      $('#ping-button').click(function(){
+        self.x = $('#x')[0].value
+        self.y = $('#y')[0].value
+        users[self.nick] = self
+        socket.emit('ping', self);
+      });
+      socket.on('broadcast', function(user){
+        users[user.nick] = user
+        refreshUserList(users)
+      });
+      function refreshUserList(users){
+        html = "";
+        console.log(users)
+        nicks = Object.keys(users)
+        nicks.forEach(function(nick){
+          html = html + '<li>' + users[nick].nick + ' ' + users[nick].x + ' ' + users[nick].y +  '</li>'
+        })
+        $('#player-list').html(html);
+      }
+    </script>
+  </body>
+</html>
