@@ -2,6 +2,11 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="profile.js"></script>
+    <script src="grid.js"></script>
+    <script src="game.js"></script>
   </head>
   <body>
     <button id="register-button">register</button>
@@ -16,10 +21,13 @@
     <script>
       var socket = io();
       $('#register-button').click(function(){
-        socket.emit('register', 'aidan');
+        socket.emit('register', {});
       });
       $('#ping-button').click(function(){
-        socket.emit('ping');
+        socket.emit('ping', {});
+      });
+      socket.on('broadcast', function(user) {
+        console.log('received ping from ', user);
       });
     </script>
   </body>
