@@ -25,31 +25,39 @@ app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
-function register(socket, user) {
-	console.log("New user", user);
+function register(socket, data) {
+	console.log("New user", data);
 
-	users[user.nick] = user;
+	users[user.nick] = new User(data);
 }
 
 // store then broadcast ping
-function receivePing(socket, ping) {
-	console.log("Received ping", ping);
+function receivePing(socket, data) {
+	console.log("Received ping", data);
 
-	var nick = ping.nick;
-
-	if (!(nick in users)) {
-
+	if (!(data.nick in users)) {
+		register(socket, data);
 	}
 
-	var user = users[nick];
+	var user = users[data.nick];
 
-	users.ping = ping;
+	// update user with all properties received
+	for (var prop in data) {
+		user[prop] = data[prop];
+	}
 
-	broadcastPing(socket, ping);
+	broadcastPing(socket, user);
 }
 
-function broadcastPing(socket, ping) {
-	console.log("Broadcasting ping", ping);
+function broadcastPing(socket, user) {
+	console.log("Broadcasting ping", user);
 
-	io.emit(socket, 'ping', ping);
+	socket.broadcast.emit('broadcast', user);
+}
+
+function User(data) {
+	this.nick = data.nick;
+	this.color = data.color;
+	this.x = data.x;
+	this.y = data.y;
 }
