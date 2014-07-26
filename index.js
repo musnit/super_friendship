@@ -22,9 +22,7 @@ app.listen(port, function() {
   console.log("Listening on " + port);
 });
 
-app.get('/', function(req, res){
-  res.sendfile('index.html');
-});
+app.use(express.static(__dirname + '/http'));
 
 function register(socket, data) {
 	console.log("New user", data);
