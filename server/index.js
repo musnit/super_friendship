@@ -17,6 +17,9 @@ http.listen(3000, function(){
   console.log('listening on *:3000');
 });
 
+app.get('/', function(req, res){
+  res.sendfile('index.html');
+});
 
 function register(user) {
 	users[user.nick] = user;
